@@ -1,7 +1,16 @@
-const { USERS } = require('../../constants');
+const { connectDB } = require('../../db');
+const { ObjectId } = require('mongodb');
 
-function findUser(id) {
-  return USERS.find(u => u.id === id);
+async function findUser(id) {
+  const db = await connectDB();
+  // Try to convert id to ObjectId, fallback to string if invalid
+  let query;
+  try {
+    query = { _id: new ObjectId(id) };
+  } catch {
+    query = { _id: id };
+  }
+  return db.collection('users').findOne(query);
 }
 
 module.exports = { findUser };

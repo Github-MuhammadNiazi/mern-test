@@ -2,6 +2,7 @@
 {
   _id: ObjectId,
   name: String,
+  role: String, // 'user' or 'admin'
   joined: Date
 }
 

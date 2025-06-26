@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { findUser } = require('./userHelper');
 
 function generateToken(user) {
-  return jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 }
 
 function authorize(roles = []) {
