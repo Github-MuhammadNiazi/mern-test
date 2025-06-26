@@ -3,4 +3,9 @@ const USERS = [
   { id: 'u2', role: 'admin' }
 ];
 
-module.exports = { USERS };
+const ROLES = {
+  user: 'user',
+  admin: 'admin'
+};
+
+module.exports = { USERS, ROLES };
