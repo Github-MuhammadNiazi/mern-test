@@ -1,9 +1,9 @@
 ## Schema Design
 
-# Schema
-Schema added to the file `db/SCHEMA.md`
+### Schema
+Schema added to the file `db/SCHEMA.js`
 
-# Indexing Strategy
+### Indexing Strategy
 - `follows`: Index on `{follower: 1}`
 - `posts`: Compound index on `{author: 1, created: -1}` to enable efficient reverse-chronological queries
 - `users`: Index on `_id` is default, so no need to add manually
