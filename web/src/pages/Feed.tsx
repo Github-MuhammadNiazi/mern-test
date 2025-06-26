@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useApi } from '../hooks/useApi';
 import { PAGE_SIZE } from '../constants';
 import { fetchFeedUrl } from '../api';
+import { useAuth } from '../context/AuthContext';
 
 interface Post {
   id: string;
@@ -16,7 +17,9 @@ const Feed: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
   const loader = useRef<HTMLDivElement | null>(null);
 
-  const { data, loading, error } = useApi<Post[]>(fetchFeedUrl(page));
+  const { jwt } = useAuth();
+  const id = jwt ? JSON.parse(atob(jwt.split('.')[1])).id : null;
+  const { data, loading, error } = useApi<Post[]>(fetchFeedUrl(page, id));
 
   useEffect(() => {
     if (data && data.length > 0) {

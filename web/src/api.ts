@@ -12,4 +12,4 @@ export const login = async (id: string) => {
   return res.json();
 };
 
-export const fetchFeedUrl = (page: number) => `${apiBase}/posts/feed?page=${page}&limit=${PAGE_SIZE}`;
+export const fetchFeedUrl = (page: number, id?: string) => `${apiBase}/posts/feed?page=${page}&limit=${PAGE_SIZE}&id=${id}`;
