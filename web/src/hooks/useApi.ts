@@ -63,11 +63,47 @@ export function useApi<T = any>(resource: string, options: ApiOptions = {}): Api
   }
 
   useEffect(() => {
+    let didCancel = false;
     if (!cache.has(resource)) {
-      fetchData();
+      (async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          let fetchUrl = url;
+          if (options.params) {
+            const params = new URLSearchParams(options.params as any).toString();
+            fetchUrl += `?${params}`;
+          }
+          const res = await fetch(fetchUrl, {
+            method: options.method || 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(jwt && !options.skipAuth ? { Authorization: `Bearer ${jwt}` } : {}),
+              ...options.headers,
+            },
+            body: options.body ? JSON.stringify(options.body) : undefined,
+          });
+          if (!res.ok) throw new Error(await res.text());
+          const json = await res.json();
+          cache.set(resource, json);
+          if (!didCancel) setData(json);
+        } catch (e) {
+          if (!didCancel) setError(e);
+        } finally {
+          if (!didCancel) setLoading(false);
+        }
+      })();
     }
+    return () => { didCancel = true; };
     // eslint-disable-next-line
-  }, [resource, JSON.stringify(options)]);
+  }, [resource, JSON.stringify(options), jwt]);
+
+  // Prevent repeated fetches if data is empty and not loading
+  useEffect(() => {
+    if (data && Array.isArray(data) && data.length === 0) {
+      setLoading(false);
+    }
+  }, [data]);
 
   return { data, loading, error, refetch };
 }

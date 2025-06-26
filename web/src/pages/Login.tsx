@@ -36,7 +36,7 @@ const Login: React.FC = () => {
       <button type="submit" disabled={loading} style={{ width: '100%' }}>
         {loading ? 'Logging in...' : 'Login'}
       </button>
-      {error && <div style={{ color: 'red', marginTop: 8 }}>{error}</div>}
+      {error && <div style={{ color: 'red', marginTop: 8 }}>Unable to Log in. Reason: {error}</div>}
     </form>
   );
 };
